@@ -21,7 +21,7 @@ public class CategoryJpaRepositoryAdapter implements CategoryRepository {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setId(null);
         categoryEntity.setName(category.getName());
-        categoryEntity.setName(category.getDescription());
+        categoryEntity.setDescription(category.getDescription());
 
         CategoryEntity saved = jpaCategoryRepository.save(categoryEntity);
 

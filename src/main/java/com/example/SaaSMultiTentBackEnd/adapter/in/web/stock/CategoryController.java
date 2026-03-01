@@ -2,8 +2,10 @@ package com.example.SaaSMultiTentBackEnd.adapter.in.web.stock;
 
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.CategoryDto;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.CategoryDtoRequest;
+import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.ProductDto;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Category;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.CategoryUseCase;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +21,21 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String createCategory(CategoryDtoRequest categoryDtoRequest){
-        categoryUseCase.createCategory(null,categoryDtoRequest.getName(),categoryDtoRequest.getDescription());
-        return "Category created successfully";
+    public ResponseEntity<Void> createCategory(@RequestBody CategoryDtoRequest categoryDtoRequest) {
+        categoryUseCase.createCategory(
+                null,
+                categoryDtoRequest.getName(),
+                categoryDtoRequest.getDescription()
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/all")
-    public List<Category> getAllCategories(){
-        return categoryUseCase.getAllCategories();
+    public List<CategoryDto> getAllCategories() {
+        return categoryUseCase.getAllCategories()
+                .stream()
+                .map(CategoryDto::new)
+                .toList();
     }
 
 
@@ -36,14 +45,14 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Category> updateCategory(
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable Long id,
             @RequestBody CategoryDtoRequest requestDto) {
 
         Category updatedCategory = categoryUseCase.updateCategory(id, requestDto.getName(), requestDto.getDescription());
 
-        return ResponseEntity.ok(updatedCategory);
+        return ResponseEntity.ok(new CategoryDto(updatedCategory));
     }
 
 }
