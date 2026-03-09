@@ -21,9 +21,9 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createCategory(@RequestBody CategoryDtoRequest categoryDtoRequest) {
+    public ResponseEntity<Void> createCategory(@RequestParam Long companyId, @RequestBody CategoryDtoRequest categoryDtoRequest) {
         categoryUseCase.createCategory(
-                null,
+                companyId,
                 categoryDtoRequest.getName(),
                 categoryDtoRequest.getDescription()
         );
@@ -31,8 +31,8 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
-    public List<CategoryDto> getAllCategories() {
-        return categoryUseCase.getAllCategories()
+    public List<CategoryDto> getAllCategories(@RequestParam Long companyId) {
+        return categoryUseCase.getAllCategories(companyId)
                 .stream()
                 .map(CategoryDto::new)
                 .toList();
@@ -40,17 +40,18 @@ public class CategoryController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryUseCase.deleteCategory(id);
+    public ResponseEntity<Void> deleteCategory(@RequestParam Long companyId,@PathVariable Long id) {
+        categoryUseCase.deleteCategory(companyId,id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CategoryDto> updateCategory(
+            @RequestParam Long companyId,
             @PathVariable Long id,
             @RequestBody CategoryDtoRequest requestDto) {
 
-        Category updatedCategory = categoryUseCase.updateCategory(id, requestDto.getName(), requestDto.getDescription());
+        Category updatedCategory = categoryUseCase.updateCategory(companyId,id, requestDto.getName(), requestDto.getDescription());
 
         return ResponseEntity.ok(new CategoryDto(updatedCategory));
     }

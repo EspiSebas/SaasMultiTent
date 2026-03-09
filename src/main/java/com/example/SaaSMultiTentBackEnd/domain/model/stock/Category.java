@@ -4,11 +4,21 @@ public class Category {
     private Long id;
     private String name;
     private String description;
+    private Long companyId;
 
-    public Category(Long id,String name, String description) {
+    public Category(Long id, String name, String description, Long companyId) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.companyId = companyId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public void update(String name, String description) {

@@ -20,8 +20,8 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public List<ProductDto> getAllProducts(){
-        return productUseCase.getAllProducts()
+    public List<ProductDto> getAllProducts(@RequestParam Long companyId){
+        return productUseCase.getAllProducts(companyId)
                 .stream()
                 .map(ProductDto::new)
                 .toList();
@@ -29,10 +29,11 @@ public class ProductController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createProduct(@RequestBody ProductDtoRequest request){
+    public ResponseEntity<Void> createProduct(@RequestParam Long companyId,@RequestBody ProductDtoRequest request){
 
 
         productUseCase.createProduct(
+                companyId,
                 request.getName(),
                 request.getDescription(),
                 request.getQuantity(),
@@ -44,19 +45,21 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        productUseCase.deleteProduct(id);
+    public ResponseEntity<Void> delete(@RequestParam  Long companyId,@PathVariable Long id){
+        productUseCase.deleteProduct(companyId,id);
         return ResponseEntity.noContent().build();
 
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductDto> updateProduct(
+            @RequestParam Long companyId,
             @PathVariable Long id,
             @RequestBody ProductDtoRequest productDtoRequest
     ){
 
         Product product = productUseCase.updateProduct(
+                companyId,
                 id,
                 productDtoRequest.getName(),
                 productDtoRequest.getDescription(),

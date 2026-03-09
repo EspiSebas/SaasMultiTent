@@ -16,33 +16,50 @@ public class CategoryService implements CategoryUseCase {
 
 
     @Override
-    public Category createCategory(Long id, String name, String description) {
-        Category category = new Category(id,name,description);
+    public Category createCategory(Long companyId, String name, String description) {
+        Category category = new Category(null,name,description,companyId);
         return categoryRepository.save(category);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.getALlCategories();
+    public List<Category> getAllCategories(Long companyId) {
+
+        if (companyId == null) {
+            throw new IllegalArgumentException("CompanyId is required");
+        }
+
+        return categoryRepository.getAllCategories(companyId);
     }
 
     @Override
-    public Category updateCategory(Long id, String name, String description) {
-        Category category = categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found"));
-        category.update(name,description);
-        return categoryRepository.save(category);
+    public Category updateCategory(Long companyId, Long id, String name, String description) {
+       Category category =  categoryRepository
+                .findByIdAndCompanyId(id, companyId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+       category.update(name,description);
+       return categoryRepository.save(category);
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+    public void deleteCategory(Long companyId, Long id) {
+        Category category = categoryRepository
+                .findByIdAndCompanyId(id, companyId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
         categoryRepository.delete(category);
     }
 
+
+
     @Override
-    public Category getCategoryById(Long id) {
+    public Category getCategoryById(Long companyId, Long id) {
+        if (companyId == null) {
+            throw new IllegalArgumentException("CompanyId is required");
+        }
+
         return categoryRepository
-                .findById(id)
+                .findByIdAndCompanyId(id, companyId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 }

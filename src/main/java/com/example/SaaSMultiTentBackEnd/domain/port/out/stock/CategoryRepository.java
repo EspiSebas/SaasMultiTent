@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CategoryRepository {
    Category save(Category category);
-   List<Category> getALlCategories();
-   Optional<Category> findById(Long id);
+   List<Category> getAllCategories(Long companyId);
    void delete(Category category);
+   Optional<Category> findByIdAndCompanyId(Long id, Long companyId);
 }

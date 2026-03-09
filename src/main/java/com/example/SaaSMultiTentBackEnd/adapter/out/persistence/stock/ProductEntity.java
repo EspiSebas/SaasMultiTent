@@ -1,5 +1,6 @@
 package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.stock;
 
+import com.example.SaaSMultiTentBackEnd.adapter.out.persistence.company.CompanyEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Product")
+@Table(name = "Products")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -24,5 +25,8 @@ public class ProductEntity {
     @JoinColumn(name = "category_id" , nullable = false)
     private CategoryEntity category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private CompanyEntity company;
 
 }
