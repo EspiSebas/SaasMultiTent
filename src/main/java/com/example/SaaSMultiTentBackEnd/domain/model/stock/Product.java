@@ -9,16 +9,25 @@ public class Product {
     private int quantity;
     private BigDecimal price;
     private Category category;
+    private Long companyId;
 
-    public Product(Long id, String name, String description, int quantity, BigDecimal price, Category category) {
+    public Product(Long id, String name, String description, int quantity, BigDecimal price, Category category, Long companyId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.category = category;
+        this.companyId = companyId;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
 
     public void update(String name, String description, int quantity, BigDecimal price, Category category ) {
 

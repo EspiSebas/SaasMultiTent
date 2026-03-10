@@ -19,41 +19,38 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Product createProduct(String name, String description, int quantity, BigDecimal price, Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
-        Product product = new Product(null,name, description,quantity,price,category);
-
+    public Product createProduct(Long companyId, String name, String description, int quantity, BigDecimal price, Long categoryId) {
+        Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
+        Product product = new Product(null,name,description,quantity,price,category,companyId);
         return productRepository.save(product);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.getALlProduct();
+    public List<Product> getAllProducts(Long companyId) {
+        return productRepository.getALlProduct(companyId);
     }
 
     @Override
-    public Product updateProduct(Long id, String name, String description, int quantity, BigDecimal price, Long categoryId) {
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
+    public Product updateProduct(Long companyId, Long id, String name, String description, int quantity, BigDecimal price, Long categoryId) {
+        Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
 
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+        Product product = productRepository.findByIdAndCompanyId(categoryId,companyId)
+                .orElseThrow(()-> new RuntimeException("Product not found"));
 
-        product.update(name, description,quantity,price,category);
+        product.update(name,description,quantity,price,category);
 
         return productRepository.save(product);
 
     }
 
     @Override
-    public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found !!"));
+    public void deleteProduct(Long companyId, Long id) {
+        Product product = productRepository.findByIdAndCompanyId(id,companyId).orElseThrow(()-> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
 
     @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found !!"));
+    public Product getProductById(Long companyId, Long id) {
+        return null;
     }
 }

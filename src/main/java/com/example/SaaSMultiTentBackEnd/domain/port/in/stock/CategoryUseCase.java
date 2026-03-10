@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface CategoryUseCase {
 
-    Category createCategory(Long id,String name, String description);
-    List<Category> getAllCategories();
-    Category updateCategory(Long id, String name, String description);
-    void deleteCategory(Long id);
-    Category getCategoryById(Long id);
+    Category createCategory(Long companyId,String name, String description);
+    List<Category> getAllCategories(Long companyId);
+    Category updateCategory(Long companyId,Long id, String name, String description);
+    void deleteCategory(Long companyId,Long id);
+    Category getCategoryById(Long companyId,Long id);
 
 }

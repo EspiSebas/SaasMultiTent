@@ -1,5 +1,7 @@
 package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.stock;
 
+import com.example.SaaSMultiTentBackEnd.adapter.out.persistence.company.CompanyEntity;
+import com.example.SaaSMultiTentBackEnd.adapter.out.persistence.company.JpaCompanyRepository;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Category;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.ProductRepository;
@@ -12,9 +14,12 @@ import java.util.Optional;
 public class ProductJpaRepositoryAdapter implements ProductRepository {
     private final JpaProductRepository jpaProductRepository;
     private final JpaCategoryRepository jpaCategoryRepository;
-    public ProductJpaRepositoryAdapter(JpaProductRepository jpaProductRepository, JpaCategoryRepository jpaCategoryRepository) {
+    private final JpaCompanyRepository jpaCompanyRepository;
+
+    public ProductJpaRepositoryAdapter(JpaProductRepository jpaProductRepository, JpaCategoryRepository jpaCategoryRepository, JpaCompanyRepository jpaCompanyRepository) {
         this.jpaProductRepository = jpaProductRepository;
         this.jpaCategoryRepository = jpaCategoryRepository;
+        this.jpaCompanyRepository = jpaCompanyRepository;
     }
 
     @Override
@@ -23,13 +28,19 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                 .findById(product.getCategory().getId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
+        CompanyEntity companyEntity = jpaCompanyRepository
+                .findById(product.getCompanyId())
+                .orElseThrow(()-> new RuntimeException("Company not found"));
+
+
         ProductEntity entity = new ProductEntity(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
                 product.getQuantity(),
                 product.getPrice(),
-                categoryEntity
+                categoryEntity,
+                companyEntity
         );
 
         ProductEntity saved = jpaProductRepository.save(entity);
@@ -43,14 +54,17 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                 new Category(
                         saved.getCategory().getId(),
                         saved.getCategory().getName(),
-                        saved.getCategory().getDescription()
-                )
+                        saved.getCategory().getDescription(),
+                        saved.getCompany().getId()
+                ),
+                saved.getCompany().getId()
         );
     }
 
+
     @Override
-    public List<Product> getALlProduct() {
-        return jpaProductRepository.findAll()
+    public List<Product> getALlProduct(Long companyId) {
+        return jpaProductRepository.findAllByCompanyId(companyId)
                 .stream()
                 .map(entity -> new Product(
                         entity.getId(),
@@ -61,16 +75,18 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                         new Category(
                                 entity.getCategory().getId(),
                                 entity.getCategory().getName(),
-                                entity.getCategory().getDescription()
-                        )
+                                entity.getCategory().getDescription(),
+                                entity.getCompany().getId()
+                        ),
+                        entity.getCompany().getId()
 
                 ))
                 .toList();
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return jpaProductRepository.findById(id)
+    public Optional<Product> findByIdAndCompanyId(Long id, Long companyId) {
+        return jpaProductRepository.findByIdAndCompanyId(id,companyId)
                 .map(entity -> new Product(
                         entity.getId(),
                         entity.getName(),
@@ -80,14 +96,20 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                         new Category(
                                 entity.getCategory().getId(),
                                 entity.getCategory().getName(),
-                                entity.getCategory().getDescription()
-                        )
+                                entity.getCategory().getDescription(),
+                                entity.getCompany().getId()
+                        ),
+                        entity.getCompany().getId()
                 ));
 
     }
 
     @Override
     public void delete(Product product) {
-        jpaProductRepository.deleteById(product.getId());
+
+        ProductEntity productSelected = jpaProductRepository.findByIdAndCompanyId(product.getId(), product.getCompanyId())
+                .orElseThrow(()-> new RuntimeException("Product not found"));
+        jpaProductRepository.delete(productSelected);
     }
+
 }

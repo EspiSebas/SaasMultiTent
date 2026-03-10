@@ -3,6 +3,7 @@ package com.example.SaaSMultiTentBackEnd.adapter.in.web.stock;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.CategoryDto;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.CategoryDtoRequest;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.ProductDto;
+import com.example.SaaSMultiTentBackEnd.config.security.SecurityUtils;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Category;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.CategoryUseCase;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,9 @@ public class CategoryController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> createCategory(@RequestBody CategoryDtoRequest categoryDtoRequest) {
+        Long companyId = SecurityUtils.getCompanyId();
         categoryUseCase.createCategory(
-                null,
+                companyId,
                 categoryDtoRequest.getName(),
                 categoryDtoRequest.getDescription()
         );
@@ -32,7 +34,8 @@ public class CategoryController {
 
     @GetMapping("/all")
     public List<CategoryDto> getAllCategories() {
-        return categoryUseCase.getAllCategories()
+        Long companyId = SecurityUtils.getCompanyId();
+        return categoryUseCase.getAllCategories(companyId)
                 .stream()
                 .map(CategoryDto::new)
                 .toList();
@@ -41,7 +44,8 @@ public class CategoryController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryUseCase.deleteCategory(id);
+        Long companyId = SecurityUtils.getCompanyId();
+        categoryUseCase.deleteCategory(companyId,id);
         return ResponseEntity.noContent().build();
     }
 
@@ -50,7 +54,8 @@ public class CategoryController {
             @PathVariable Long id,
             @RequestBody CategoryDtoRequest requestDto) {
 
-        Category updatedCategory = categoryUseCase.updateCategory(id, requestDto.getName(), requestDto.getDescription());
+        Long companyId = SecurityUtils.getCompanyId();
+        Category updatedCategory = categoryUseCase.updateCategory(companyId,id, requestDto.getName(), requestDto.getDescription());
 
         return ResponseEntity.ok(new CategoryDto(updatedCategory));
     }
