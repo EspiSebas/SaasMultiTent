@@ -20,7 +20,7 @@ public class ProductService implements ProductUseCase {
 
     @Override
     public Product createProduct(Long companyId, String name, String description, int quantity, BigDecimal price, Long categoryId) {
-        Category category = categoryRepository.findByIdAndCompanyId(companyId,categoryId).orElseThrow(()-> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
         Product product = new Product(null,name,description,quantity,price,category,companyId);
         return productRepository.save(product);
     }
@@ -32,7 +32,7 @@ public class ProductService implements ProductUseCase {
 
     @Override
     public Product updateProduct(Long companyId, Long id, String name, String description, int quantity, BigDecimal price, Long categoryId) {
-        Category category = categoryRepository.findByIdAndCompanyId(companyId,categoryId).orElseThrow(()-> new RuntimeException("Category not found"));
+        Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
 
         Product product = productRepository.findByIdAndCompanyId(categoryId,companyId)
                 .orElseThrow(()-> new RuntimeException("Product not found"));
@@ -45,7 +45,7 @@ public class ProductService implements ProductUseCase {
 
     @Override
     public void deleteProduct(Long companyId, Long id) {
-        Product product = productRepository.findByIdAndCompanyId(companyId,id).orElseThrow(()-> new RuntimeException("Product not found"));
+        Product product = productRepository.findByIdAndCompanyId(id,companyId).orElseThrow(()-> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
 

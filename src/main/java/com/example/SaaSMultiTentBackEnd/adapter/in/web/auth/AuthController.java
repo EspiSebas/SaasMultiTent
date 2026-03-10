@@ -24,13 +24,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegisterDtoRequest request){
-        String passwordBcrypt = passwordEncoder.encode(request.getPassword());
 
         authUseCase.register(
                 request.getNameCompany(),
                 request.getName(),
                 request.getEmail(),
-                passwordBcrypt
+                request.getPassword()
 
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();

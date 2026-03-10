@@ -6,7 +6,9 @@ import com.example.SaaSMultiTentBackEnd.domain.port.in.auth.AuthUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.company.CompanyRepository;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.user.TokenProvider;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.user.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 public class AuthService implements AuthUseCase {
 
@@ -23,22 +25,22 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
-
+    @Transactional
     public String register(String nameCompany, String name, String email, String password) {
 
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
         }
-
         Company company = new Company(null, nameCompany);
-        companyRepository.save(company);
+        company = companyRepository.save(company);
+        String passwordBy = passwordEncoder.encode(password);
 
-        User user = new User(null,name,email,password,company.getId());
-
+        User user = new User(null, name, email,passwordBy, company.getId());
         userRepository.saveUser(user);
 
-
         return "User created";
+
+
     }
 
     @Override
@@ -47,6 +49,8 @@ public class AuthService implements AuthUseCase {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new RuntimeException("User not found"));
 
+        System.out.println(passwordEncoder.matches(password, user.getPassword()));
+        System.out.println(new BCryptPasswordEncoder().encode("mario1234"));
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }

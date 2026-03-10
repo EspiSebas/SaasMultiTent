@@ -38,16 +38,19 @@ public class AuthJpaRepositoryAdapter implements UserRepository {
 
     @Override
     public User saveUser(User user) {
+
+        if (user.getCompanyId() == null) {
+            throw new IllegalArgumentException("CompanyId cannot be null");
+        }
+
         CompanyEntity companyEntity = jpaCompanyRepository.findById(user.getCompanyId())
-                .orElseThrow(()-> new RuntimeException(
-                        "Company not found"
-                ));
+                .orElseThrow(() -> new RuntimeException("Company not found with id " + user.getCompanyId()));
 
         UserEntity userEntity = new UserEntity();
         userEntity.setId(null);
         userEntity.setName(user.getName());
         userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(userEntity.getPassword());
+        userEntity.setPassword(user.getPassword());
         userEntity.setCompany(companyEntity);
 
         UserEntity saved = jpaUserRepository.save(userEntity);
@@ -55,7 +58,7 @@ public class AuthJpaRepositoryAdapter implements UserRepository {
         return new User(
                 saved.getId(),
                 saved.getName(),
-                saved.getName(),
+                saved.getEmail(),
                 saved.getPassword(),
                 saved.getCompany().getId()
         );

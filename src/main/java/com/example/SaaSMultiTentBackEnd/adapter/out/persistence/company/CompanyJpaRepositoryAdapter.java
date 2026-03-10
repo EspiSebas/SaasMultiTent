@@ -16,8 +16,8 @@ public class CompanyJpaRepositoryAdapter implements CompanyRepository {
     @Override
     public Company save(Company company) {
         CompanyEntity companyEntity = new CompanyEntity();
-        companyEntity.setId(null);
-        companyEntity.setName(companyEntity.getName());
+        companyEntity.setId(company.getId());
+        companyEntity.setName(company.getName());
 
         CompanyEntity saved = jpaCompanyRepository.save(companyEntity);
 
