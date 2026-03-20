@@ -9,8 +9,10 @@ import com.example.SaaSMultiTentBackEnd.domain.service.stock.CategoryService;
 import com.example.SaaSMultiTentBackEnd.domain.service.stock.ProductService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
+@EnableWebSecurity
 public class StockBeanConfig {
     @Bean
     public CategoryUseCase categoryUseCase(CategoryRepository categoryRepository){
