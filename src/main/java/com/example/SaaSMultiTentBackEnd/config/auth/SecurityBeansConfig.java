@@ -54,7 +54,6 @@ public class SecurityBeansConfig {
 
         JwtAuthenticationFilter jwtFilter =
                 new JwtAuthenticationFilter(tokenProvider);
-dd
         http
                 .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
