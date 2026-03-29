@@ -8,15 +8,15 @@ public class DetailSale {
     private BigDecimal unitPrice;
     private BigDecimal total;
 
+
     public void calculateTotal() {
         this.total = unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
-    public DetailSale(Long productId, Integer quantity, BigDecimal unitPrice, BigDecimal total) {
+    public DetailSale(Long productId, Integer quantity) {
         this.productId = productId;
         this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.total = total;
+
     }
 
     public Long getProductId() {

@@ -1,4 +1,4 @@
-package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.sale;
+package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.sale.entity;
 
 import com.example.SaaSMultiTentBackEnd.adapter.out.persistence.company.CompanyEntity;
 import com.example.SaaSMultiTentBackEnd.domain.model.sale.PaymentMethod;
@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,6 @@ public class SaleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
@@ -40,10 +40,9 @@ public class SaleEntity {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
-    private List<DetailSaleEntity> details;
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetailSaleEntity> details = new ArrayList<>();
 
-    private LocalDateTime createdAt;
 
 
 }

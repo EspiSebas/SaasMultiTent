@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SaleUseCase {
-    Sale createSale(Long companyId, LocalDateTime date, BigDecimal subtotal, BigDecimal discount, BigDecimal total, BigDecimal tax, PaymentMethod paymentMethod, List<DetailSale> details);
+    Sale createSale(Long companyId, BigDecimal discount, PaymentMethod paymentMethod, List<DetailSale> details);
     List<Sale> getAllSales(Long companyId);
 
 

@@ -1,4 +1,4 @@
-package com.example.SaaSMultiTentBackEnd.adapter.in.web.auth;
+package com.example.SaaSMultiTentBackEnd.adapter.in.web.controllers.auth;
 
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.auth.AuthResponse;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.auth.LoginDtoRequest;

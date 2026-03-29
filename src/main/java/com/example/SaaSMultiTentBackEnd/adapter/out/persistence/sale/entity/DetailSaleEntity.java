@@ -1,4 +1,4 @@
-package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.sale;
+package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.sale.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,6 +1,5 @@
-package com.example.SaaSMultiTentBackEnd.adapter.in.web.company;
+package com.example.SaaSMultiTentBackEnd.adapter.in.web.controllers.company;
 
-import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.company.CompanyDto;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.company.CompanyDtoRequest;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.company.CompanyUseCase;
 import org.springframework.http.HttpStatus;
