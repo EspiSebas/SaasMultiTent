@@ -1,4 +1,4 @@
-package com.example.SaaSMultiTentBackEnd.adapter.in.web.stock;
+package com.example.SaaSMultiTentBackEnd.adapter.in.web.controllers.stock;
 
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.CategoryDto;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.CategoryDtoRequest;
