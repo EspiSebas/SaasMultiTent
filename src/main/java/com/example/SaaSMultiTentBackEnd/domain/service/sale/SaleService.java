@@ -24,7 +24,7 @@ public class SaleService implements SaleUseCase {
 
     @Transactional
     @Override
-    public Sale createSale(Long companyId, BigDecimal discount, PaymentMethod paymentMethod, List<DetailSale> details) {
+    public Sale createSale(Long id,Long companyId, BigDecimal discount, PaymentMethod paymentMethod, List<DetailSale> details) {
         for(DetailSale detailSale : details ){
 
             Product product = productRepository.findByIdAndCompanyId(detailSale.getProductId(),companyId)
@@ -42,6 +42,7 @@ public class SaleService implements SaleUseCase {
 
         }
         Sale sale = new Sale(
+                null,
                 companyId,
                 LocalDateTime.now(),
                 discount,

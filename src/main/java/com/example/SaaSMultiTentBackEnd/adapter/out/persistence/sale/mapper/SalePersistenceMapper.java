@@ -47,11 +47,14 @@ public class SalePersistenceMapper {
         List<DetailSale> details = entity.getDetails().stream()
                 .map(d -> new DetailSale(
                         d.getProductId(),
-                        d.getQuantity()
+                        d.getQuantity(),
+                        d.getUnitPrice(),
+                        d.getTotal()
                 ))
                 .toList();
 
         return new Sale(
+                entity.getId(),
                 entity.getCompany().getId(),
                 entity.getDate(),
                 entity.getDiscount(),

@@ -16,12 +16,13 @@ public class Sale {
 
     private List<DetailSale> details;
 
-    public Sale(Long companyId,
+    public Sale(Long id, Long companyId,
                 LocalDateTime date,
                 BigDecimal discount,
                 PaymentMethod paymentMethod,
                 List<DetailSale> details) {
 
+        this.id = id;
         this.companyId = companyId;
         this.date = date;
         this.discount = discount;

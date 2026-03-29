@@ -13,9 +13,11 @@ public class DetailSale {
         this.total = unitPrice.multiply(BigDecimal.valueOf(quantity));
     }
 
-    public DetailSale(Long productId, Integer quantity) {
+    public DetailSale(Long productId, Integer quantity,BigDecimal unitPrice,BigDecimal total) {
         this.productId = productId;
         this.quantity = quantity;
+        this.unitPrice =  unitPrice;
+        this.total = total;
 
     }
 

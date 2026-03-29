@@ -2,13 +2,11 @@ package com.example.SaaSMultiTentBackEnd.adapter.in.web.controllers.sale;
 
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.sale.SaleDtoRequest;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.sale.SaleDtoResponse;
-import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.ProductDto;
 import com.example.SaaSMultiTentBackEnd.adapter.in.web.mapper.SaleMapper;
 import com.example.SaaSMultiTentBackEnd.config.security.SecurityUtils;
 import com.example.SaaSMultiTentBackEnd.domain.model.sale.Sale;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.sale.SaleUseCase;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +28,7 @@ public class SaleController {
         Sale sale = SaleMapper.toDomain(request);
         Long companyId = SecurityUtils.getCompanyId();
         saleUseCase.createSale(
+                null,
           companyId,
           sale.getDiscount(),
                 sale.getPaymentMethod(),

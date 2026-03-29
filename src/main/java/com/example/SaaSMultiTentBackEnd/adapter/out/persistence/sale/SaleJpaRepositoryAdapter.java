@@ -29,7 +29,7 @@ public class SaleJpaRepositoryAdapter implements SaleRepository {
 
     @Override
     public List<Sale> getAllSales(Long companyId) {
-        return jpaSaleRepositoy.findAllSaleByCompany(companyId)
+        return jpaSaleRepositoy.findAllSaleByCompanyId(companyId)
                 .stream()
                 .map(SalePersistenceMapper::toDomain)
                 .toList();

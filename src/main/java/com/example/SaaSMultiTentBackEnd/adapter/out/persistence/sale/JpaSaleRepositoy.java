@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public interface JpaSaleRepositoy extends JpaRepository<SaleEntity,Long> {
-    List<SaleEntity> findAllSaleByCompany(Long companyId);
+    List<SaleEntity> findAllSaleByCompanyId(Long companyId);
 
 
 }
