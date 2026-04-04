@@ -1,15 +1,16 @@
 package com.example.SaaSMultiTentBackEnd.domain.model.sale;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Sale {
     private Long id;
     private Long companyId;
-    private LocalDateTime date;
+    private LocalDate date;
     private BigDecimal subtotal;
-    private  BigDecimal discount;
+    private BigDecimal discount;
     private BigDecimal total;
     private BigDecimal tax;
     private PaymentMethod paymentMethod;
@@ -17,7 +18,7 @@ public class Sale {
     private List<DetailSale> details;
 
     public Sale(Long id, Long companyId,
-                LocalDateTime date,
+                LocalDate date,
                 BigDecimal discount,
                 PaymentMethod paymentMethod,
                 List<DetailSale> details) {
@@ -57,11 +58,11 @@ public class Sale {
         this.companyId = companyId;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

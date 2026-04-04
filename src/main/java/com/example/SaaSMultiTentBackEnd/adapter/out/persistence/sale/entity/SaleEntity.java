@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class SaleEntity {
     private CompanyEntity company;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(nullable = false)
     private BigDecimal subtotal;

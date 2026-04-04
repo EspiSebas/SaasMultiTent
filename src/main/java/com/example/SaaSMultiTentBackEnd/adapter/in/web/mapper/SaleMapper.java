@@ -7,7 +7,9 @@ import com.example.SaaSMultiTentBackEnd.domain.model.sale.DetailSale;
 import com.example.SaaSMultiTentBackEnd.domain.model.sale.PaymentMethod;
 import com.example.SaaSMultiTentBackEnd.domain.model.sale.Sale;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class SaleMapper {
@@ -17,7 +19,7 @@ public class SaleMapper {
         return new Sale(
                 null,
                 companyId,
-                LocalDateTime.now(),
+                LocalDate.now(),
                 dto.getDiscount(),
                 mapPaymentMethod(dto.getPaymentMethod()),
                 mapDetails(dto.getDetails())

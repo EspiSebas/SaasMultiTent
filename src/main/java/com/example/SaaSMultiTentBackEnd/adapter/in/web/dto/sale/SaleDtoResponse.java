@@ -6,6 +6,9 @@ import com.example.SaaSMultiTentBackEnd.domain.model.sale.Sale;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -14,6 +17,7 @@ public class SaleDtoResponse {
     private PaymentMethod paymentMethod;
     private List<SaleDetailRequest> details;
     private BigDecimal discount;
+    private LocalDate date;
 
     public SaleDtoResponse(Sale sale) {
         this.id = sale.getId();
@@ -28,5 +32,7 @@ public class SaleDtoResponse {
                         d.getTotal()
                 ))
                 .toList();
+
+        this.date = sale.getDate();
     }
 }

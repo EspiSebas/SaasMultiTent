@@ -10,6 +10,7 @@ import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.ProductRepository;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class SaleService implements SaleUseCase {
         Sale sale = new Sale(
                 null,
                 companyId,
-                LocalDateTime.now(),
+                LocalDate.now(),
                 discount,
                 paymentMethod,
                 details
