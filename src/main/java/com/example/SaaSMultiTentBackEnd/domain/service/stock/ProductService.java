@@ -2,6 +2,7 @@ package com.example.SaaSMultiTentBackEnd.domain.service.stock;
 
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Category;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
+import com.example.SaaSMultiTentBackEnd.domain.model.stock.StatusStock;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.ProductUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.CategoryRepository;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.ProductRepository;
@@ -21,7 +22,14 @@ public class ProductService implements ProductUseCase {
     @Override
     public Product createProduct(Long companyId, String name, String description, int quantity, BigDecimal price, Long categoryId) {
         Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
-        Product product = new Product(null,name,description,quantity,price,category,companyId);
+        Product product = new Product(null,name,description,quantity,price,category,companyId,null);
+        if(quantity>0 && quantity<10){
+            product.setStatus(StatusStock.BAJO_MINIMO);
+        } else if (quantity==0) {
+            product.setStatus(StatusStock.AGOTADO);
+        }else{
+            product.setStatus(StatusStock.EN_STOCK);
+        }
         return productRepository.save(product);
     }
 

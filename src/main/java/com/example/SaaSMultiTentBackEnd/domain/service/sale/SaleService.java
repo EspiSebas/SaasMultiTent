@@ -4,6 +4,7 @@ import com.example.SaaSMultiTentBackEnd.domain.model.sale.DetailSale;
 import com.example.SaaSMultiTentBackEnd.domain.model.sale.PaymentMethod;
 import com.example.SaaSMultiTentBackEnd.domain.model.sale.Sale;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
+import com.example.SaaSMultiTentBackEnd.domain.model.stock.StatusStock;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.sale.SaleUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.sale.SaleRepository;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.ProductRepository;
@@ -36,6 +37,13 @@ public class SaleService implements SaleUseCase {
             }
 
             product.setQuantity(product.getQuantity() - detailSale.getQuantity());
+            if(product.getQuantity() - detailSale.getQuantity()>0 && product.getQuantity() - detailSale.getQuantity()<10){
+                product.setStatus(StatusStock.BAJO_MINIMO);
+            } else if (product.getQuantity() - detailSale.getQuantity()==0) {
+                product.setStatus(StatusStock.AGOTADO);
+            }else{
+                product.setStatus(StatusStock.EN_STOCK);
+            }
             productRepository.save(product);
 
             detailSale.setUnitPrice(product.getPrice());

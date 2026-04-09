@@ -40,7 +40,8 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                 product.getQuantity(),
                 product.getPrice(),
                 categoryEntity,
-                companyEntity
+                companyEntity,
+                product.getStatus()
         );
 
         ProductEntity saved = jpaProductRepository.save(entity);
@@ -57,8 +58,9 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                         saved.getCategory().getDescription(),
                         saved.getCompany().getId()
                 ),
-                saved.getCompany().getId()
-        );
+                saved.getCompany().getId(),
+
+                entity.getStatus());
     }
 
 
@@ -78,8 +80,8 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                                 entity.getCategory().getDescription(),
                                 entity.getCompany().getId()
                         ),
-                        entity.getCompany().getId()
-
+                        entity.getCompany().getId(),
+                        entity.getStatus()
                 ))
                 .toList();
     }
@@ -99,7 +101,8 @@ public class ProductJpaRepositoryAdapter implements ProductRepository {
                                 entity.getCategory().getDescription(),
                                 entity.getCompany().getId()
                         ),
-                        entity.getCompany().getId()
+                        entity.getCompany().getId(),
+                        entity.getStatus()
                 ));
 
     }
