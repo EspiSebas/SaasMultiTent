@@ -10,8 +10,17 @@ public class Product {
     private BigDecimal price;
     private Category category;
     private Long companyId;
+    private StatusStock status;
 
-    public Product(Long id, String name, String description, int quantity, BigDecimal price, Category category, Long companyId) {
+    public StatusStock getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusStock status) {
+        this.status = status;
+    }
+
+    public Product(Long id, String name, String description, int quantity, BigDecimal price, Category category, Long companyId, StatusStock status) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -19,6 +28,7 @@ public class Product {
         this.price = price;
         this.category = category;
         this.companyId = companyId;
+        this.status = status;
     }
 
     public Long getCompanyId() {

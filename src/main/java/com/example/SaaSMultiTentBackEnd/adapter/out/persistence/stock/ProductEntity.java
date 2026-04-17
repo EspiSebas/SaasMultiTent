@@ -1,6 +1,7 @@
 package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.stock;
 
 import com.example.SaaSMultiTentBackEnd.adapter.out.persistence.company.CompanyEntity;
+import com.example.SaaSMultiTentBackEnd.domain.model.stock.StatusStock;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,4 +30,6 @@ public class ProductEntity {
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;
 
+    @Enumerated(EnumType.STRING)
+    private StatusStock status;
 }

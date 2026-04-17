@@ -1,6 +1,7 @@
 package com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock;
 
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
+import com.example.SaaSMultiTentBackEnd.domain.model.stock.StatusStock;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class ProductDto {
     private int quantity;
     private BigDecimal price;
     private CategoryDto category;
+    private StatusStock status;
 
     public ProductDto(Product product) {
         this.id = product.getId();
@@ -27,5 +29,6 @@ public class ProductDto {
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
         this.category = new CategoryDto(product.getCategory());
+        this.status = product.getStatus();
     }
 }
