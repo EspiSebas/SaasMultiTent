@@ -15,61 +15,88 @@ public class CategoryJpaRepositoryAdapter implements CategoryRepository {
     private final JpaCategoryRepository jpaCategoryRepository;
     private final JpaCompanyRepository jpaCompanyRepository;
 
-    public CategoryJpaRepositoryAdapter(JpaCategoryRepository jpaCategoryRepository, JpaCompanyRepository jpaCompanyRepository) {
+    public CategoryJpaRepositoryAdapter(
+            JpaCategoryRepository jpaCategoryRepository,
+            JpaCompanyRepository jpaCompanyRepository
+    ) {
         this.jpaCategoryRepository = jpaCategoryRepository;
         this.jpaCompanyRepository = jpaCompanyRepository;
     }
 
     @Override
     public Category save(Category category) {
-        CompanyEntity company = jpaCompanyRepository.findById(category.getCompanyId()).orElseThrow(()-> new RuntimeException("Company not found"));
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setId(null);
+
+        CompanyEntity company = jpaCompanyRepository
+                .findById(category.getCompanyId())
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        CategoryEntity categoryEntity;
+
+        // UPDATE
+        if (category.getId() != null) {
+
+            categoryEntity = jpaCategoryRepository
+                    .findByIdAndCompanyId(
+                            category.getId(),
+                            category.getCompanyId()
+                    )
+                    .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        } else {
+
+            // CREATE
+            categoryEntity = new CategoryEntity();
+        }
+
         categoryEntity.setName(category.getName());
         categoryEntity.setDescription(category.getDescription());
         categoryEntity.setCompany(company);
 
         CategoryEntity saved = jpaCategoryRepository.save(categoryEntity);
 
-        return new Category(
-                saved.getId(),
-                saved.getName(),
-                saved.getDescription(),
-                saved.getCompany().getId()
-        );
-
+        return mapToDomain(saved);
     }
-
 
     @Override
     public List<Category> getAllCategories(Long companyId) {
+
         return jpaCategoryRepository.findAllByCompanyId(companyId)
                 .stream()
-                .map(entity -> new Category(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getDescription(),
-                        entity.getCompany().getId()
-                ))
+                .map(this::mapToDomain)
                 .toList();
     }
 
-
     @Override
     public void delete(Category category) {
-        CategoryEntity categorySelected = jpaCategoryRepository.findByIdAndCompanyId(category.getId(),category.getCompanyId()).orElseThrow(()-> new RuntimeException("Category not found"));
-        jpaCategoryRepository.delete(categorySelected);
 
+        CategoryEntity categorySelected = jpaCategoryRepository
+                .findByIdAndCompanyId(
+                        category.getId(),
+                        category.getCompanyId()
+                )
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        jpaCategoryRepository.delete(categorySelected);
     }
 
     @Override
-    public Optional<Category> findByIdAndCompanyId(Long id, Long companyId) {
-        return jpaCategoryRepository.findByIdAndCompanyId(id,companyId)
-                .map(entity -> new Category(
-                        entity.getId(),
-                        entity.getName(),
-                        entity.getDescription(),
-                        entity.getCompany().getId()
-                ));
+    public Optional<Category> findByIdAndCompanyId(
+            Long id,
+            Long companyId
+    ) {
+
+        return jpaCategoryRepository
+                .findByIdAndCompanyId(id, companyId)
+                .map(this::mapToDomain);
+    }
+
+    private Category mapToDomain(CategoryEntity entity) {
+
+        return new Category(
+                entity.getId(),
+                entity.getName(),
+                entity.getDescription(),
+                entity.getCompany().getId()
+        );
     }
 }

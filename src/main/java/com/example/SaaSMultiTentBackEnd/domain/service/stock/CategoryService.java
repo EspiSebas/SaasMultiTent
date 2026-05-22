@@ -37,6 +37,9 @@ public class CategoryService implements CategoryUseCase {
                 .findByIdAndCompanyId(id, companyId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
+
+        System.out.println("CATEGORY ID: " + category.getId());
+
        category.update(name,description);
        return categoryRepository.save(category);
     }

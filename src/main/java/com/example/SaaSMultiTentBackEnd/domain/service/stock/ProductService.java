@@ -42,7 +42,7 @@ public class ProductService implements ProductUseCase {
     public Product updateProduct(Long companyId, Long id, String name, String description, int quantity, BigDecimal price, Long categoryId) {
         Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
 
-        Product product = productRepository.findByIdAndCompanyId(categoryId,companyId)
+        Product product = productRepository.findByIdAndCompanyId(id,companyId)
                 .orElseThrow(()-> new RuntimeException("Product not found"));
 
         product.update(name,description,quantity,price,category);
