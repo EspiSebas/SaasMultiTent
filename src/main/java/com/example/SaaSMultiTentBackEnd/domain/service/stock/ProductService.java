@@ -45,6 +45,7 @@ public class ProductService implements ProductUseCase {
         Product product = productRepository.findByIdAndCompanyId(id,companyId)
                 .orElseThrow(()-> new RuntimeException("Product not found"));
 
+
         product.update(name,description,quantity,price,category);
 
         return productRepository.save(product);

@@ -53,6 +53,16 @@ public class Product {
             throw new IllegalArgumentException("Description cannot be empty");
         }
 
+        if(quantity>0 && quantity<10){
+            this.status = StatusStock.BAJO_MINIMO;
+        } else if (quantity==0) {
+            this.status = StatusStock.AGOTADO;
+        }else{
+            this.status = StatusStock.EN_STOCK;
+        }
+
+
+
         this.name = name;
         this.description = description;
         this.quantity = quantity;

@@ -34,7 +34,7 @@ public class SalePersistenceMapper {
                     detail.setQuantity(d.getQuantity());
                     detail.setUnitPrice(d.getUnitPrice());
                     detail.setTotal(d.getTotal());
-                    detail.setSale(entity); // 🔥 relación
+                    detail.setSale(entity);
                     return detail;
                 }).toList();
 
