@@ -3,6 +3,7 @@ package com.example.SaaSMultiTentBackEnd.domain.service.stock;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Category;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.CategoryUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.CategoryRepository;
+import com.example.SaaSMultiTentBackEnd.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -35,10 +36,8 @@ public class CategoryService implements CategoryUseCase {
     public Category updateCategory(Long companyId, Long id, String name, String description) {
        Category category =  categoryRepository
                 .findByIdAndCompanyId(id, companyId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-
-        System.out.println("CATEGORY ID: " + category.getId());
 
        category.update(name,description);
        return categoryRepository.save(category);
@@ -48,7 +47,7 @@ public class CategoryService implements CategoryUseCase {
     public void deleteCategory(Long companyId, Long id) {
         Category category = categoryRepository
                 .findByIdAndCompanyId(id, companyId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         categoryRepository.delete(category);
     }

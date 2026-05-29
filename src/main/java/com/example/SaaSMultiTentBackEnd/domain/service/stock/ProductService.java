@@ -6,6 +6,7 @@ import com.example.SaaSMultiTentBackEnd.domain.model.stock.StatusStock;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.ProductUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.CategoryRepository;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.ProductRepository;
+import com.example.SaaSMultiTentBackEnd.exception.ResourceNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ProductService implements ProductUseCase {
         Category category = categoryRepository.findByIdAndCompanyId(categoryId,companyId).orElseThrow(()-> new RuntimeException("Category not found"));
 
         Product product = productRepository.findByIdAndCompanyId(id,companyId)
-                .orElseThrow(()-> new RuntimeException("Product not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found"));
 
 
         product.update(name,description,quantity,price,category);
@@ -54,7 +55,7 @@ public class ProductService implements ProductUseCase {
 
     @Override
     public void deleteProduct(Long companyId, Long id) {
-        Product product = productRepository.findByIdAndCompanyId(id,companyId).orElseThrow(()-> new RuntimeException("Product not found"));
+        Product product = productRepository.findByIdAndCompanyId(id,companyId).orElseThrow(()-> new ResourceNotFoundException("Product not found"));
         productRepository.delete(product);
     }
 

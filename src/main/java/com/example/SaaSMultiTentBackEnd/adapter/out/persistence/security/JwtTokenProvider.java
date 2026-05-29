@@ -1,6 +1,7 @@
 package com.example.SaaSMultiTentBackEnd.adapter.out.persistence.security;
 
 import com.example.SaaSMultiTentBackEnd.domain.port.out.user.TokenProvider;
+import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +15,9 @@ import java.util.Date;
 public class JwtTokenProvider implements TokenProvider {
 
 
-    private final String secretKey="50501209-498b-45da-993a-7f4a9b502a02";
+    @Value("${jwt.secret}")
+    private String secretKey;
+
 
     private final long expiration = 3600000;
 

@@ -6,6 +6,9 @@ import com.example.SaaSMultiTentBackEnd.domain.port.in.auth.AuthUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.company.CompanyRepository;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.user.TokenProvider;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.user.UserRepository;
+import com.example.SaaSMultiTentBackEnd.exception.BadRequestException;
+import com.example.SaaSMultiTentBackEnd.exception.ResourceNotFoundException;
+import com.example.SaaSMultiTentBackEnd.exception.UnauthorizedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +32,7 @@ public class AuthService implements AuthUseCase {
     public String register(String nameCompany, String name, String email, String password) {
 
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email already exists");
+            throw new BadRequestException("Email already exists");
         }
         Company company = new Company(null, nameCompany);
         company = companyRepository.save(company);
@@ -40,19 +43,16 @@ public class AuthService implements AuthUseCase {
 
         return "User created";
 
-
     }
 
     @Override
     public String login(String email, String password) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("User not found"));
 
-        System.out.println(passwordEncoder.matches(password, user.getPassword()));
-        System.out.println(new BCryptPasswordEncoder().encode("mario1234"));
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
         }
 
         return tokenProvider.generateToken(user.getEmail(), user.getCompanyId());
