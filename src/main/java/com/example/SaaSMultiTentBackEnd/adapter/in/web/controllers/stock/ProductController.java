@@ -5,6 +5,7 @@ import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.ProductDtoReque
 import com.example.SaaSMultiTentBackEnd.config.security.SecurityUtils;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.ProductUseCase;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ProductController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Void> createProduct(@RequestBody ProductDtoRequest request){
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
 
         Long companyId = SecurityUtils.getCompanyId();
         productUseCase.createProduct(
@@ -58,7 +59,7 @@ public class ProductController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductDtoRequest productDtoRequest
+             @Valid  @RequestBody ProductDtoRequest productDtoRequest
     ){
 
         Long companyId = SecurityUtils.getCompanyId();

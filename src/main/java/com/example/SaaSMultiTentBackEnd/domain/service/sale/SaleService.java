@@ -8,6 +8,8 @@ import com.example.SaaSMultiTentBackEnd.domain.model.stock.StatusStock;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.sale.SaleUseCase;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.sale.SaleRepository;
 import com.example.SaaSMultiTentBackEnd.domain.port.out.stock.ProductRepository;
+import com.example.SaaSMultiTentBackEnd.exception.BadRequestException;
+import com.example.SaaSMultiTentBackEnd.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
@@ -30,10 +32,10 @@ public class SaleService implements SaleUseCase {
         for(DetailSale detailSale : details ){
 
             Product product = productRepository.findByIdAndCompanyId(detailSale.getProductId(),companyId)
-                    .orElseThrow(()-> new RuntimeException("Product not found"));
+                    .orElseThrow(()-> new ResourceNotFoundException("Product not found"));
 
             if(product.getQuantity() < detailSale.getQuantity()){
-                throw new RuntimeException("Not enough stock");
+                throw new BadRequestException("Not enough stock");
             }
 
             product.setQuantity(product.getQuantity() - detailSale.getQuantity());
