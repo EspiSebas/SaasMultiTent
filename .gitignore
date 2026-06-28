@@ -34,6 +34,8 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
+.vscode/
+.env
 .env
 branch_structure.json
 temp_auto_push.bat

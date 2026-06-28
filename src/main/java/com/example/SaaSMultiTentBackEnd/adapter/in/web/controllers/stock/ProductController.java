@@ -5,6 +5,13 @@ import com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock.ProductDtoReque
 import com.example.SaaSMultiTentBackEnd.config.security.SecurityUtils;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.ProductUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +40,12 @@ public class ProductController {
 
 
     @PostMapping("/create")
+    @Operation(summary = "Create product")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Product created"),
+            @ApiResponse(responseCode = "400", description = "Product error")
+    })
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
     public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
 
         Long companyId = SecurityUtils.getCompanyId();
@@ -59,7 +72,7 @@ public class ProductController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable Long id,
-             @Valid  @RequestBody ProductDtoRequest productDtoRequest
+            @RequestBody ProductDtoRequest productDtoRequest
     ){
 
         Long companyId = SecurityUtils.getCompanyId();
