@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,6 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/products")
-@Tag(name = "Product")
-@SecurityRequirement(name = "BearerAuth")
 public class ProductController {
     private final ProductUseCase productUseCase;
 
@@ -31,11 +30,6 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    @Operation(summary = "Get all products")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Products got"),
-            @ApiResponse(responseCode = "400", description = "Error")
-    })
     public List<ProductDto> getAllProducts(){
         Long companyId = SecurityUtils.getCompanyId();
         return productUseCase.getAllProducts(companyId)
@@ -52,6 +46,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "Product error")
     })
     public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
 
         Long companyId = SecurityUtils.getCompanyId();
         productUseCase.createProduct(
@@ -67,17 +62,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Operation(
-            summary = "Delete a product",
-            description = "Delete a product by ID"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Product deleted"),
-            @ApiResponse(responseCode = "404", description = "Product not deleted")
-    })
-    public ResponseEntity<Void> delete(
-            @Parameter(description = "ID product", example = "1")
-            @PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id){
         Long companyId = SecurityUtils.getCompanyId();
         productUseCase.deleteProduct(companyId,id);
         return ResponseEntity.noContent().build();
@@ -85,18 +70,9 @@ public class ProductController {
     }
 
     @PutMapping("/update/{id}")
-    @Operation(
-            summary = "Update a product",
-            description = "Update all the information about product"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Product updated correctly"),
-            @ApiResponse(responseCode = "400", description = "Data invalid"),
-            @ApiResponse(responseCode = "404", description = "Product not found")
-    })
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable Long id,
-             @Valid  @RequestBody ProductDtoRequest productDtoRequest
+            @RequestBody ProductDtoRequest productDtoRequest
     ){
 
         Long companyId = SecurityUtils.getCompanyId();

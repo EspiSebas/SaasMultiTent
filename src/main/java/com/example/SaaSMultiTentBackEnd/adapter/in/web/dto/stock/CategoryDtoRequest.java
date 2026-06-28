@@ -1,6 +1,8 @@
 package com.example.SaaSMultiTentBackEnd.adapter.in.web.dto.stock;
 
+import jakarta.validation.constraints.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Schema(description = "Request payload for creating a new product category")
 public class CategoryDtoRequest {
+    @NotBlank(message = "Name is required")
 
     @Schema(
             description = "Category name",
@@ -21,6 +24,7 @@ public class CategoryDtoRequest {
     )
     @NotBlank(message = "Name is required")
     private String name;
+    @NotBlank(message = "Description is required")
 
     @Schema(
             description = "Category description",
