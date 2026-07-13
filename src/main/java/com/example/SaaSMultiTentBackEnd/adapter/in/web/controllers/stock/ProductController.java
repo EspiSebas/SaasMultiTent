@@ -6,12 +6,10 @@ import com.example.SaaSMultiTentBackEnd.config.security.SecurityUtils;
 import com.example.SaaSMultiTentBackEnd.domain.model.stock.Product;
 import com.example.SaaSMultiTentBackEnd.domain.port.in.stock.ProductUseCase;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +20,10 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/products")
+@Tag(name = "Product")
+@SecurityRequirement(name = "BearerAuth")
 public class ProductController {
+
     private final ProductUseCase productUseCase;
 
     public ProductController(ProductUseCase productUseCase) {
@@ -30,25 +31,31 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public List<ProductDto> getAllProducts(){
+    @Operation(summary = "Get all products")
+    @ApiResponse(responseCode = "200", description = "Products retrieved successfully")
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+
         Long companyId = SecurityUtils.getCompanyId();
-        return productUseCase.getAllProducts(companyId)
+
+        List<ProductDto> products = productUseCase.getAllProducts(companyId)
                 .stream()
                 .map(ProductDto::new)
                 .toList();
-    }
 
+        return ResponseEntity.ok(products);
+    }
 
     @PostMapping("/create")
     @Operation(summary = "Create product")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Product created"),
-            @ApiResponse(responseCode = "400", description = "Product error")
+            @ApiResponse(responseCode = "400", description = "Invalid product data")
     })
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody ProductDtoRequest request){
+    public ResponseEntity<Void> createProduct(
+            @Valid @RequestBody ProductDtoRequest request) {
 
         Long companyId = SecurityUtils.getCompanyId();
+
         productUseCase.createProduct(
                 companyId,
                 request.getName(),
@@ -61,33 +68,43 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        Long companyId = SecurityUtils.getCompanyId();
-        productUseCase.deleteProduct(companyId,id);
-        return ResponseEntity.noContent().build();
-
-    }
-
     @PutMapping("/update/{id}")
+    @Operation(summary = "Update product")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Product updated"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     public ResponseEntity<ProductDto> updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductDtoRequest productDtoRequest
-    ){
+            @Valid @RequestBody ProductDtoRequest request) {
 
         Long companyId = SecurityUtils.getCompanyId();
+
         Product product = productUseCase.updateProduct(
                 companyId,
                 id,
-                productDtoRequest.getName(),
-                productDtoRequest.getDescription(),
-                productDtoRequest.getQuantity(),
-                productDtoRequest.getPrice(),
-                productDtoRequest.getCategoryId()
+                request.getName(),
+                request.getDescription(),
+                request.getQuantity(),
+                request.getPrice(),
+                request.getCategoryId()
         );
 
         return ResponseEntity.ok(new ProductDto(product));
-
     }
 
+    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Delete product")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Product deleted"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+
+        Long companyId = SecurityUtils.getCompanyId();
+
+        productUseCase.deleteProduct(companyId, id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

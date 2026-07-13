@@ -34,7 +34,6 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/
 .env
 .env
 branch_structure.json
